@@ -1,42 +1,125 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Launch Checklist</title>
-        <link rel = "stylesheet" type = "text/css" href = "styles.css" />
-        <script src = "script.js"></script>
-    </head>
-    <body>
-        <h1>Launch Checklist Form</h1>
-        <div id="missionTarget">
-            <!-- Fetch some planetary data -->
-        </div> 
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<head>
+    <title>Launch Checklist</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="script.js"></script>
+</head>
+
+
+<body>
+    <h1> Launch Checklist Form </h1>
+    <div id="missionTarget">
+        <script>
+            window.addEventListener("load", function() {
+                        let json = [];
+                        fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+                            response.json().then(function(json) {
+                                const missionTarget = document.getElementById("missionTarget");
+                                let index = 0;
+                                missionTarget.addEventListener("click", function() {
+                                    missionTarget.innerHTML = `
+                <ol>
+                  <li>Name: ${json[index].name}</li>
+                  <li>Diameter: ${json[index].diameter}</li>
+                  <li>Star: ${json[index].star}</li>
+                  <li>Distance from Earth: ${json[index].distance}</li>
+                  <li>Number of Moons: ${json[index].moons}</li>
+                  </ol>
+                
+                  `;
+                                    index = (index + 1) % json.length;
+
+                                });
+                            });
+
+                        });
+        </script>
+        <h2>Mission Destination</h2>
+        <img src="${json[index].image}" height="75" width="75" id="planetPic"></img>
+        <div>
+
+
+        </div>
         <div id="launchForm">
-            <form>
+            <form method="POST" action="index.html">
                 <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Pilot Name <input type="text" name="pilotName" id="pilotName"/></label>
+                    <label> Pilot Name
+                    <input type="text" name="pilotName" id="pilotName"/>
+                    </label>
                 </div>
                 <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Co-pilot Name <input type="text" name="copilotName"/></label>
+                    <label> Co-pilot Name
+                    <input type="text" name="copilotName" id="copilotName"/>
+                    </label>
                 </div>
                 <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Fuel Level (L) <input type="text" name="fuelLevel"/></label> 
+                    <label> Fuel Level(L)
+                    <input type="number" name="fuelLevel"/>
+                    </label>
                 </div>
                 <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Cargo Mass (kg) <input type="text" name="cargoMass"/></label>
+                    <label> Cargo Mass(kg)
+                    <input type="number" name="cargoMass"/>
+                    </label>
                 </div>
-                <button id="formSubmit">Submit</button>
+                <button id="formSubmit"> Submit
+                </button>
+                <script>
+                    let button = document.getElementById("formSubmit");
+                    button.addEventListener("click", function() {
+                                let form = document.querySelector("form");
+                                form.addEventListener("formSubmit", function(event) {
+                                        let pilotNameInput = document.querySelector("input[name=pilotName]");
+                                        let copilotNameInput = document.querySelector("input[name=copilotName]");
+                                        let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
+                                        let cargoMassInput = document.querySelector("input[name=cargoMass]");
+                                        let inputArray = [
+                                            pilotNameInput,
+                                            copilotNameInput,
+                                            fuelLevelInput,
+                                            cargoMassInput
+                                        ]
+                                        for (let i = 0; i < inputArray.length; i++) {
+                                            if (inputArray[i].value === "") {
+                                                alert("All fields are required");
+                                                event.preventDefault();
+                                            }
+                                        }
+                                        if (isNaN(inputArray[2].value) || isNaN(inputArray[3].value)) {
+                                            alert("Please enter valid numbers");
+                                            event.preventDefault();
+                                        }
+                                    }
+
+
+                                });
+                </script>
             </form>
         </div>
         <div id="launchStatusCheck">
-            <h2 id="launchStatus">Awaiting Information Before Launch</h2>
-            <div  id="faultyItems">
+            <h2 id="launchStatus"> Awaiting Information Before Launch
+            </h2>
+            <div id="faultyItems">
                 <ol>
-                    <li id="pilotStatus">Pilot Ready</li>
-                    <li id="copilotStatus">Co-pilot Ready</li>
-                    <li id="fuelStatus">Fuel level high enough for launch</li>
-                    <li id="cargoStatus">Cargo mass low enough for launch</li>
+                    <li id="pilotStatus"> Pilot ${name.pilotName} Ready
+                    </li>
+                    <li id="copilotStatus"> Co-pilot ${name.copilotName} Ready
+                    </li>
+                    <li id="fuelStatus"> Fuel level high enough for launch
+                    </li>
+                    <li id="cargoStatus"> Cargo mass low enough for launch
+                    </li>
                 </ol>
             </div>
-        </div>    
-    </body>
+        </div>
+    </div>
+    </div>
+</body>
+
 </html>
