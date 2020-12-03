@@ -22,12 +22,13 @@
                 let copilotNameInput = document.querySelector("input[name=copilotName]");
                 let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
                 let cargoMassInput = document.querySelector("input[name=cargoMass]");
-                let inputArray = [
+                var inputArray = [
                     pilotNameInput,
                     copilotNameInput,
                     fuelLevelInput,
                     cargoMassInput
-                ]
+                ];
+                let launchStatus = document.getElementById("launchStatus");
                 for (let i = 0; i < inputArray.length; i++) {
                     if (inputArray[i].value === "") {
                         alert("All fields are required");
@@ -40,19 +41,34 @@
                     event.preventDefault();
                     return;
                 }
+                if (inputArray[2].value > 10000 && inputArray[3].value < 10000) {
+                    launchStatus.innerHTML = `
+                        Shuttle is ready for launch
+                    `;
+                    document.getElementById("launchStatus").style.color = "green";
+                    document.getElementById("faultyItems").style.visibility = "visible";
+
+                } else {
+                    document.getElementById("launchStatus").style.color = "red";
+                    launchStatus.innerHTML = `
+                    Shuttle not ready for launch
+                    `;
+                    document.getElementById("faultyItems").style.visibility = "visible";
+                }
             });
         });
     </script>
     <div id="missionTarget">
         <script>
             window.addEventListener("load", function() {
-                        let json = [];
-                        fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
-                            response.json().then(function(json) {
-                                const missionTarget = document.getElementById("missionTarget");
-                                let index = 0;
-                                missionTarget.addEventListener("click", function() {
-                                    missionTarget.innerHTML = `
+                let json = [];
+                fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+                    response.json().then(function(json) {
+                        const missionTarget = document.getElementById("missionTarget");
+                        let index = 0;
+                        missionTarget.addEventListener("click", function() {
+                            missionTarget.innerHTML = `
+                <h2> Mission Destination</h2>
                 <ol>
                   <li>Name: ${json[index].name}</li>
                   <li>Diameter: ${json[index].diameter}</li>
@@ -60,60 +76,59 @@
                   <li>Distance from Earth: ${json[index].distance}</li>
                   <li>Number of Moons: ${json[index].moons}</li>
                 </ol>
+                <img src="${json[index].image}" alt="Picture of a planet" id="planetPic"</img>
                 `;
-                                    index = (index + 1) % json.length;
-
-                                });
-                            });
+                            index = (index + 1) % json.length;
 
                         });
+                    });
+
+                });
+            });
         </script>
-        <h2>Mission Destination</h2>
-        <img src="${json[index].image}" height="75" width="75" id="planetPic"></img>
-        <div>
-
-
-        </div>
-        <div id="launchForm">
-            <form method="POST" action="index.html">
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label> Pilot Name
-            <input type="text" name="pilotName" id="pilotName"/>
-            </label>
-                </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label> Co-pilot Name
-            <input type="text" name="copilotName" id="copilotName"/>
-            </label>
-                </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label> Fuel Level(L)
-            <input type="text" name="fuelLevel"/>
-            </label>
-                </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label> Cargo Mass(kg)
-            <input type="text" name="cargoMass"/>
-            </label>
-                </div>
-                <button id="formSubmit"> Submit</button>
-            </form>
-        </div>
-        <div id="launchStatusCheck">
-            <h2 id="launchStatus"> Awaiting Information Before Launch</h2>
-            <div id="faultyItems">
-                <ol>
-                    <li id="pilotStatus"> Pilot `${inputArray[0]}` Ready
-                    </li>
-                    <li id="copilotStatus"> Co-pilot `${inputArray[1]}` Ready
-                    </li>
-                    <li id="fuelStatus"> Fuel level high enough for launch
-                    </li>
-                    <li id="cargoStatus"> Cargo mass low enough for launch
-                    </li>
-                </ol>
+    </div>
+    <div id="launchForm">
+        <form method="POST">
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label> Pilot Name
+                        <input type="text" name="pilotName" id="pilotName"/>
+                    </label>
             </div>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label> Co-pilot Name
+                        <input type="text" name="copilotName" id="copilotName"/>
+                    </label>
+            </div>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label> Fuel Level(L)
+                        <input type="tex " name="fuelLevel"/>
+                    </label>
+            </div>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label> Cargo Mass(kg)
+                        <input type="text" name="cargoMass"/>
+                    </label>
+            </div>
+            <button id="formSubmit"> Submit
+                </button>
+        </form>
+    </div>
+    <div id="launchStatusCheck">
+        <h2 id="launchStatus"> Awaiting Information Before Launch
+        </h2>
+        <div id="faultyItems">
+            <ol>
+                <li id="pilotStatus"> Pilot Ready
+                </li>
+                <li id="copilotStatus"> Co-pilot Ready
+                </li>
+                <li id="fuelStatus"> Fuel level high enough for launch
+                </li>
+                <li id="cargoStatus"> Cargo mass low enough for launch
+                </li>
+            </ol>
         </div>
+    </div>
     </div>
     </div>
 </body>
