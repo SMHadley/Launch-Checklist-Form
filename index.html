@@ -40,7 +40,6 @@
                 }
                 if (isNaN(inputArray[2].value) || isNaN(inputArray[3].value)) {
                     alert("Please enter valid numbers");
-                    event.preventDefault();
                     return;
                 }
                 if (inputArray[2].value < 10000 && inputArray[3].value > 10000) {
@@ -72,9 +71,9 @@
                     `;
                     faultyItems.innerHTML = `           
                      <ol>
-                    <li id="pilotStatus"> Pilot ${pilotNameInput[name]} is Ready
+                    <li id="pilotStatus"> Pilot {{pilotNameInput}} is Ready
                     </li>
-                    <li id="copilotStatus"> Co-pilot ${copilotNameInput} is Ready
+                    <li id="copilotStatus"> Co-pilot {{copilotNameInput}} is Ready
                     </li>
                     <li id="fuelStatus"> Fuel level too low for launch
                     </li>
@@ -157,9 +156,9 @@
         </h2>
         <div id="faultyItems">
             <ol>
-                <li id="pilotStatus"> Pilot ${pilotName.value} is Ready
+                <li id="pilotStatus"> Pilot {{pilotNameInput}}is Ready
                 </li>
-                <li id="copilotStatus"> Co-pilot ${input.copilotName} is Ready
+                <li id="copilotStatus"> Co-pilot {{pilotNameInput}} is Ready
                 </li>
                 <li id="fuelStatus"> Fuel level high enough for launch
                 </li>
